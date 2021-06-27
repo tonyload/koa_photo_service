@@ -112,11 +112,12 @@ router.get("/checkcode/:code",async(context,next)=>{
 /**
  * 小程序种获取相册的相片列表
  */
- router.get('/xcx/album/:id', auth, async (context, next) => {
-  const photos = await photo.getPhotos(context.state.user.id, context.params.id)
-  context.body = {
-    status: 0,
-    data: photos
+ router.get('/xcx/album/:id', auth, async (ctx, next) => {
+  const pageParams = getPageParams(ctx)
+  const photos = await app.controller.photo.getPhotos(ctx,pageParams)
+  ctx.body = {
+    status:0,
+    data:photos
   }
 })
 
@@ -164,6 +165,7 @@ router.post("/photo",auth, upload.single('file'),async (ctx,next)=>{
 },responseOK)
 
 
+//删除图片
 router.delete("/photo/:id",auth,async (ctx,next)=>{
   const p = await app.controller.photo.getPhotoById(ctx)
   console.log(p)
