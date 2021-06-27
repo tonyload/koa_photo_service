@@ -3,7 +3,6 @@ const {
   } = require('./model')
 
 module.exports = {
-
     async getPhotosByAlbumId (albumId, pageIndex, pageSize) {
         let result
         if (pageSize) {
@@ -35,13 +34,17 @@ module.exports = {
             isDelete: false
           }).skip((pageIndex - 1) * pageSize).limit(pageSize)
     },
-    async add(userId, url, albumId) {
+    async add(userId, url, albumId,filename) {
+      console.log("service 收到的filename 是=======",filename)
       let _photo = await Phopto.create({
         userId,
         url,
-        albumId
+        albumId,
+        filename
       })
       return _photo
-
+    },
+    async getPhotoById (id) {
+      return Phopto.findById(id)
     }
 }

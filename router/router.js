@@ -108,7 +108,18 @@ router.get("/checkcode/:code",async(context,next)=>{
       data: albums,
       status: 0
     }
-  })
+})
+/**
+ * 小程序种获取相册的相片列表
+ */
+ router.get('/xcx/album/:id', auth, async (context, next) => {
+  const photos = await photo.getPhotos(context.state.user.id, context.params.id)
+  context.body = {
+    status: 0,
+    data: photos
+  }
+})
+
 
 /**
  * 添加相册
@@ -148,7 +159,21 @@ router.get("/album/:id",auth,async (ctx,next)=>{
  * 上传文件,upload.single('file') 参数file是前端上传的文件字段名 element上传组件中的name
  */
 router.post("/photo",auth, upload.single('file'),async (ctx,next)=>{
-  await app.controller.photo.add(ctx, `http://localhost:3000/${ctx.file.filename}`)
+  await app.controller.photo.add(ctx, `${ctx.file.filename}`)
+  await next()
+},responseOK)
+
+
+router.delete("/photo/:id",auth,async (ctx,next)=>{
+  const p = await app.controller.photo.getPhotoById(ctx)
+  console.log(p)
+  if(p){//找到了执行删除
+    if (p.userId === ctx.state.user.id || ctx.state.user.isAdmin) {
+      await photo.delete(ctx.params.id)
+    } else {
+      ctx.throw(403, '该用户无权限')
+    }
+  }
   await next()
 },responseOK)
 

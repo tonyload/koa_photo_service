@@ -48,13 +48,16 @@ const photoSchema = new mongoose.Schema({
   url: {
     type: String
   },
+  albumId: {
+    type: mongoose.Schema.Types.ObjectId
+  },
+  fileName:{
+    type:String,
+  },
   isApproved: {
     type: Boolean,
     default: null,
     index: true
-  },
-  albumId: {
-    type: mongoose.Schema.Types.ObjectId
   },
   created: {
     type: Date,
@@ -63,7 +66,7 @@ const photoSchema = new mongoose.Schema({
   isDelete: {
     type: Boolean,
     default: false
-  }
+  },
 })
 
 

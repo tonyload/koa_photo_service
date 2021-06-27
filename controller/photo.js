@@ -14,8 +14,13 @@ module.exports = {
     async add(context,url){
         let userId = context.state.user.id
         const {app} = context
-        return app.service.photo.add(userId, url, context.request.body.id)
-    }
+        return app.service.photo.add(userId, url, context.request.body.id,context.file.filename)
+    },
+    async getPhotoById(ctx){
+        const id =ctx.params.id
+        const {app} = ctx
+        return app.service.photo.getPhotoById(id)
+    },
     
 
 
